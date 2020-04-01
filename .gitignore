@@ -40,3 +40,4 @@ lib
 nbproject
 .idea
 .node_history
+.env
