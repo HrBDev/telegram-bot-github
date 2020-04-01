@@ -8,6 +8,7 @@ const { MESSAGES } = require('./common');
 const { GitHubNotification } = require('./services');
 const BOT_COMMANDS = requireAll({ dirname: `${__dirname}/commands` });
 const app = express();
+require('dotenv').config();
 
 if (!process.env.TELEGRAM_BOT_TOKEN) throw new Error('You must provide TELEGRAM_BOT_TOKEN');
 if (!process.env.MONGODB_URI) throw new Error('You must provide MONGODB_URI');
@@ -17,7 +18,7 @@ const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: process.e
 Object.keys(BOT_COMMANDS).forEach(command => BOT_COMMANDS[command](bot));
 
 app.use(bodyParser.json());
-app.get(`/`, (req, res) => res.redirect('http://telegram.me/GitHubNotificationsBot'));
+app.get(`/`, (req, res) => res.redirect(`http://telegram.me/${process.env.TELEGRAM_BOT_USERNAME}`));
 app.post(`/${process.env.TELEGRAM_BOT_TOKEN}`, (req, res) => {
   bot.processUpdate(req.body);
   res.sendStatus(200);
